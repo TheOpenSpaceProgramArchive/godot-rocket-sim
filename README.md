@@ -4,7 +4,7 @@ A Godot 2.1 project
 A simple 2D Rocket physics sim.
 
 To play:
-  Install [Godot Engine](https://godotengine.org/).
+Install [Godot Engine](https://godotengine.org/).
  Open the repo in the Godot editor.
   Hit Play.
 
