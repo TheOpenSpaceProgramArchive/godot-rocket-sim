@@ -1,5 +1,5 @@
 # godot-rocket-sim
-## A Godot 2.1 project
+## A Godot 2.1 project.
 
 A simple 2D Rocket physics sim.
 
