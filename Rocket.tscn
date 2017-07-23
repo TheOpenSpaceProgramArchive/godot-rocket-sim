@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://rocket.png" type="Texture" id=1]
+[ext_resource path="res://exhaust.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -47,7 +48,7 @@ velocity/angular = 0.0
 damp_override/linear = -1.0
 damp_override/angular = -1.0
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Rocket" type="Sprite" parent="."]
 
 texture = ExtResource( 1 )
 
@@ -74,5 +75,11 @@ transform/scale = Vector2( 3.02459, 0.740018 )
 shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 2
+
+[node name="Exhaust" type="Sprite" parent="."]
+
+visibility/visible = false
+transform/pos = Vector2( 0, 108.865 )
+texture = ExtResource( 2 )
 
 

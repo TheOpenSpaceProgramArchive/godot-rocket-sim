@@ -45,10 +45,12 @@ func _ready():
 	set_process(true)
 
 func _process(delta):
-	# Camera WASD movement.
 	if (Input.is_key_pressed(KEY_W)):
 		fly(-player_speed, acceleration, delta)
+		get_child(0).get_node("Exhaust").set_hidden(false)
 		print(get_child(0).get_linear_velocity())
+	else:
+		get_child(0).get_node("Exhaust").set_hidden(true)
 	if (Input.is_key_pressed(KEY_A)):
 		move(-player_speed, acceleration, delta)
 		print(get_child(0).get_linear_velocity())
