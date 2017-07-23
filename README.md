@@ -1,7 +1,7 @@
 # godot-rocket-sim
 ## A Godot 2.1 project.
 
-A simple 2D Rocket physics sim.
+A simple 2D rocket physics sim.
 
 ### To play:
 **1.** Install [Godot Engine](https://godotengine.org/).
