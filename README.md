@@ -5,7 +5,7 @@ A simple 2D Rocket physics sim.
 
 To play:
   Install [Godot Engine](https://godotengine.org/).
-  Open the repo in the Godot editor.
+ Open the repo in the Godot editor.
   Hit Play.
 
 Todo:
