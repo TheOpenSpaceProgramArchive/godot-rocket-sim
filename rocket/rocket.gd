@@ -12,8 +12,12 @@ var player_speed = 200
 # The rocket's yaw control rotational period imparted by an internal gyrosope.
 var period = 2.0 # s
 
+# Yaw control.
 func yaw(delta):
-	set_rot(2 * PI * delta / period + get_rot())
+	if Input.is_key_pressed(KEY_A):
+		set_rot(get_rot() + 2 * PI * delta / period) # rad
+	if Input.is_key_pressed(KEY_D):
+		set_rot(get_rot() - 2 * PI * delta / period) # rad
 
 func fly(speed, acc, delta):
 	current_speed.y = lerp(current_speed.y, speed, acc * delta)
@@ -28,15 +32,10 @@ func _ready():
 	set_fixed_process(true)
 
 func _fixed_process(delta):
-	if (Input.is_key_pressed(KEY_W)):
+	if Input.is_key_pressed(KEY_W):
 		fly(-player_speed, acceleration, delta)
 		get_node("Exhaust").set_hidden(false)
 		print(get_linear_velocity())
 	else:
 		get_node("Exhaust").set_hidden(true)
-	if (Input.is_key_pressed(KEY_A)):
-		yaw(delta)
-		print(get_rot())
-	if (Input.is_key_pressed(KEY_D)):
-		yaw(-delta)
-		print(get_rot())
+	yaw(delta)
