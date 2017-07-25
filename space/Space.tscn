@@ -8,6 +8,7 @@
 
 [node name="Background" type="Sprite" parent="."]
 
+visibility/visible = false
 transform/pos = Vector2( 524.275, 616.246 )
 z/z = -1
 texture = ExtResource( 1 )
