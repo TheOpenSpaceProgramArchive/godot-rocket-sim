@@ -3,8 +3,8 @@ extends RigidBody2D
 # The exhaust animation.
 onready var exhaust = get_node("Exhaust")
 
-# The rocket's yaw control rotational period imparted by an internal gyrosope.
-var period = 2.0 # s
+# The torque applied for yaw control
+var yawTorque = 25000
 
 # Ignition force vector.
 func force_vector(magnitude):
@@ -20,10 +20,11 @@ func ignite(delta):
 
 # Yaw control.
 func yaw(delta):
+	set_applied_torque(0)
 	if Input.is_key_pressed(KEY_A):
-		set_rot(get_rot() + 2 * PI * delta / period) # rad
+		set_applied_torque(-yawTorque)
 	if Input.is_key_pressed(KEY_D):
-		set_rot(get_rot() - 2 * PI * delta / period) # rad
+		set_applied_torque(get_applied_torque() + yawTorque)
 
 # Draw the direction of the ingition force.
 # func _draw():
