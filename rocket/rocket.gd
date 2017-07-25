@@ -14,7 +14,7 @@ func force_vector(magnitude):
 func ignite(delta):
 	if Input.is_key_pressed(KEY_W):
 		exhaust.set_hidden(false)
-		apply_impulse(exhaust.get_pos(), delta * force_vector(200.0))
+		apply_impulse(exhaust.get_pos().rotated(get_rot()), delta * force_vector(200.0))
 	else:
 		exhaust.set_hidden(true)
 
@@ -26,10 +26,10 @@ func yaw(delta):
 		set_rot(get_rot() - 2 * PI * delta / period) # rad
 
 # Draw the direction of the ingition force.
-func _draw():
-	var from = exhaust.get_pos()
-	var to = exhaust.get_pos() - force_vector(200.0)
-	draw_line(from, to, Color(0, 1, 0))
+# func _draw():
+# 	var from = exhaust.get_pos()
+# 	var to = exhaust.get_pos() - force_vector(200.0)
+# 	draw_line(from, to, Color(0, 1, 0))
 
 func _ready():
 	# Viewport width.
