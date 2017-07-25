@@ -1,10 +1,19 @@
 extends RigidBody2D
 
+# Path to the root node of the HUD
+export(NodePath) var hudPath
+
 # The exhaust animation.
 onready var exhaust = get_node("Exhaust")
 
+# Throttle indicator.
+onready var throttleIndicator = get_node(hudPath).get_node("throttleIndicator")
+
 # The torque applied for yaw control.
 var yawTorque = 25000
+
+#Engine throttle. (0-1)
+var throttle = 0
 
 # Ignition force vector.
 func force_vector(magnitude):
@@ -12,11 +21,8 @@ func force_vector(magnitude):
 
 # Engine ignition.
 func ignite(delta):
-	if Input.is_key_pressed(KEY_W):
-		exhaust.set_hidden(false)
-		apply_impulse(exhaust.get_pos().rotated(get_rot()), delta * force_vector(200.0))
-	else:
-		exhaust.set_hidden(true)
+	exhaust.set_opacity(throttle)
+	apply_impulse(exhaust.get_pos().rotated(get_rot()), delta * force_vector(200.0) * throttle)
 
 # Yaw control.
 func yaw(delta):
@@ -25,6 +31,19 @@ func yaw(delta):
 		set_applied_torque(-yawTorque)
 	if Input.is_action_pressed("yawRight"):
 		set_applied_torque(get_applied_torque() + yawTorque)
+
+# Set the throttle based on user input.
+func handleThrottleInput(delta):
+	if Input.is_action_pressed("throttleUp"):
+		throttle += delta / 2
+	if Input.is_action_pressed("throttleDown"):
+		throttle -= delta / 2
+	if Input.is_action_pressed("throttleMax"):
+		throttle = 1
+	if Input.is_action_pressed("throttleMin"):
+		throttle = 0
+	throttle = clamp(throttle, 0, 1)
+	throttleIndicator.set_value(throttle)
 
 # Draw the direction of the ingition force.
 # func _draw():
@@ -41,5 +60,6 @@ func _ready():
 	set_fixed_process(true)
 
 func _fixed_process(delta):
+	handleThrottleInput(delta)
 	ignite(delta)
 	yaw(delta)

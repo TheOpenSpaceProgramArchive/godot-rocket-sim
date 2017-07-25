@@ -49,6 +49,7 @@ velocity/angular = 0.0
 damp_override/linear = 0.0
 damp_override/angular = 0.0
 script/script = ExtResource( 1 )
+hudPath = null
 
 [node name="Rocket" type="Sprite" parent="."]
 
@@ -80,7 +81,7 @@ _update_shape_index = 2
 
 [node name="Exhaust" type="Sprite" parent="."]
 
-visibility/visible = false
+visibility/opacity = 0.0
 transform/pos = Vector2( 0, 108.865 )
 texture = ExtResource( 3 )
 
