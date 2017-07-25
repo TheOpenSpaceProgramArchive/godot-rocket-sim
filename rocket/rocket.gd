@@ -3,7 +3,7 @@ extends RigidBody2D
 # The exhaust animation.
 onready var exhaust = get_node("Exhaust")
 
-# The torque applied for yaw control
+# The torque applied for yaw control.
 var yawTorque = 25000
 
 # Ignition force vector.
@@ -21,9 +21,9 @@ func ignite(delta):
 # Yaw control.
 func yaw(delta):
 	set_applied_torque(0)
-	if Input.is_key_pressed(KEY_A):
+	if Input.is_action_pressed("yawLeft"):
 		set_applied_torque(-yawTorque)
-	if Input.is_key_pressed(KEY_D):
+	if Input.is_action_pressed("yawRight"):
 		set_applied_torque(get_applied_torque() + yawTorque)
 
 # Draw the direction of the ingition force.
