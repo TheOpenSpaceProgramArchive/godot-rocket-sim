@@ -9,11 +9,29 @@ onready var exhaust = get_node("Exhaust")
 # Throttle indicator.
 onready var throttleIndicator = get_node(hudPath).get_node("throttleIndicator")
 
+# SAS indicator.
+onready var sasIndicator = get_node(hudPath).get_node("sasIndicator")
+
 # The torque applied for yaw control.
 var yawTorque = 25000
 
 #Engine throttle. (0-1)
 var throttle = 0
+
+# SAS helper class
+const SAS = preload("res://rocket/sas.gd")
+
+# Instance of SAS helper class
+var sas = SAS.new()
+
+# Target orientation for SAS
+onready var setpoint = get_rot()
+
+# Whether SAS is enabled
+var sasEnabled = false
+
+# What output from the PID controller for SAS equals maximum torque
+var maxSAS = 10
 
 # Ignition force vector.
 func force_vector(magnitude):
@@ -31,6 +49,31 @@ func yaw(delta):
 		set_applied_torque(-yawTorque)
 	if Input.is_action_pressed("yawRight"):
 		set_applied_torque(get_applied_torque() + yawTorque)
+	# If there was no player input and SAS is enabled, run the SAS code
+	# Otherwise, have SAS target our current orientation
+	if get_applied_torque() == 0:
+		doSAS(delta)
+	else:
+		setpoint = get_rot()
+
+# Handles SAS
+func doSAS(delta):
+	if Input.is_action_pressed("toggleSAS"):
+		# Before enabling SAS, set the target orientation to the current orientation
+		if !sasEnabled:
+			sasEnabled = true
+			setpoint = get_rot()
+		else:
+			sasEnabled = false
+		sasIndicator.set_pressed(sasEnabled)
+	if !sasEnabled:
+		return
+	# Run the PID controller and clamp its output to within the max torque
+	var pidOut = -sas.run(get_rot(), setpoint, delta)
+	print(pidOut)
+	pidOut = clamp(pidOut, -maxSAS, maxSAS) / maxSAS * yawTorque
+	# Apply torque
+	set_applied_torque(pidOut)
 
 # Set the throttle based on user input.
 func handleThrottleInput(delta):
