@@ -30,8 +30,11 @@ onready var setpoint = get_rot()
 # Whether SAS is enabled
 var sasEnabled = false
 
+# Whether the key to toggle SAS was down on the last frame
+var sasKeyPressedLastFrame = false
+
 # What output from the PID controller for SAS equals maximum torque
-var maxSAS = 10
+var maxSAS = 0.1
 
 # Ignition force vector.
 func force_vector(magnitude):
@@ -59,18 +62,21 @@ func yaw(delta):
 # Handles SAS
 func doSAS(delta):
 	if Input.is_action_pressed("toggleSAS"):
-		# Before enabling SAS, set the target orientation to the current orientation
-		if !sasEnabled:
-			sasEnabled = true
-			setpoint = get_rot()
-		else:
-			sasEnabled = false
-		sasIndicator.set_pressed(sasEnabled)
+		if not sasKeyPressedLastFrame:
+			# Before enabling SAS, set the target orientation to the current orientation
+			if !sasEnabled:
+				sasEnabled = true
+				setpoint = get_rot()
+			else:
+				sasEnabled = false
+			sasIndicator.set_pressed(sasEnabled)
+		sasKeyPressedLastFrame = true
+	else:
+		sasKeyPressedLastFrame = false
 	if !sasEnabled:
 		return
 	# Run the PID controller and clamp its output to within the max torque
 	var pidOut = -sas.run(get_rot(), setpoint, delta)
-	print(pidOut)
 	pidOut = clamp(pidOut, -maxSAS, maxSAS) / maxSAS * yawTorque
 	# Apply torque
 	set_applied_torque(pidOut)
@@ -99,7 +105,6 @@ func _ready():
 	var width = get_viewport().get_rect().size.width # px
 	# Place the rocket close to the surface.
 	set_pos(Vector2(width / 2, 470.0))
-	#
 	set_fixed_process(true)
 
 func _fixed_process(delta):
